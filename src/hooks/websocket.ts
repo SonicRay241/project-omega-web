@@ -43,6 +43,15 @@ export const useWS = (
         }
     }, [])
 
+    // Wrap send to ensure it maintains its `this` binding
+    const send = (data: string | ArrayBuffer | Blob | ArrayBufferView) => {
+        if (ws.current && ws.current.readyState === WebSocket.OPEN) {
+            ws.current.send(data);
+        } else {
+            console.warn("WebSocket is not open.");
+        }
+    };
+
     // bind is needed to make sure `send` references correct `this`
-    return {isReady, val, bind: ws.current?.send.bind(ws.current)}
+    return {isReady, val, send: send}
 }

@@ -13,19 +13,42 @@ import {
     TooltipTrigger,
 } from "@/components/ui/tooltip"
 
+function AITooltip(props: {
+    showNew: boolean
+}) {
+    const [tooltipOpen, setTooltipOpen] = useState(false)
+
+    return (
+        <div className="h-full pt-1">
+            <Tooltip open={tooltipOpen}>
+                <TooltipTrigger
+                    onMouseEnter={() => { setTooltipOpen(true) }}
+                    onMouseLeave={() => { setTooltipOpen(false) }}
+                    onClick={() => { setTooltipOpen(!tooltipOpen) }}
+                    asChild
+                >
+                    <Info className={`w-4 h-4 text-zinc-600 transition-opacity ${props.showNew ? "opacity-0" : "opacity-100"}`} />
+                </TooltipTrigger>
+                <TooltipContent className="max-w-40">
+                    <p>Price will change depending on demand</p>
+                </TooltipContent>
+            </Tooltip>
+        </div>
+    )
+}
+
 export default function Price(props: {
     productId: string
     apiUrl: string
-    variant: string
+    selectedVariant: string
 }) {
     const [pageLoaded, setPageLoaded] = useState(false)
     const [currDuration, setCurrDuration] = useState(0)
     const [showNew, setShowNew] = useState(false)
     const [oldValue, setOldValue] = useState("0")
-    const [tooltipOpen, setTooltipOpen] = useState(false)
 
     const ws = useWS(
-        `ws://${props.apiUrl}/live-update/product/${props.productId}/price?variant=${props.variant}`,
+        `ws://${props.apiUrl}/live-update/product/${props.productId}/price`,
         {
             onMessage: () => {
                 if (!pageLoaded) {
@@ -51,10 +74,28 @@ export default function Price(props: {
                         position: "top-center"
                     }
                 )
+            },
+            onClose: () => {
+                toast.error(
+                    "An error occured",
+                    {
+                        description: "Connection to a live service closed, please reload the page",
+                        classNames: {
+                            icon: "text-red-600"
+                        },
+                        position: "top-center"
+                    }
+                )
             }
         }
     )
 
+    // Update variant
+    useEffect(() => {
+        ws.send(props.selectedVariant)
+    }, [props.selectedVariant])
+
+    // Update animation data
     useEffect(() => {
         setTimeout(() => {
             setOldValue(ws.val || "0")
@@ -64,7 +105,7 @@ export default function Price(props: {
     return (
         <div className="flex gap-1 text-3xl font-bold">
             <motion.div
-                className="relative block overflow-hidden whitespace-nowrap transition-opacity"
+                className="relative block overflow-hidden whitespace-nowrap transition-opacity w-full"
             >
                 <motion.span
                     animate={{
@@ -74,9 +115,10 @@ export default function Price(props: {
                         },
                         y: showNew ? "100%" : 0,
                     }}
-                    className={"inline-block"}
+                    className={"flex gap-1"}
                 >
-                    { "Rp" + formatStrNumber(oldValue) }
+                    {"Rp" + formatStrNumber(oldValue)}
+                    <AITooltip showNew={showNew} />
                 </motion.span>
                 <div className="absolute inset-0">
                     <motion.span
@@ -87,27 +129,13 @@ export default function Price(props: {
                             },
                             y: showNew ? 0 : "-100%",
                         }}
-                        className="inline-block"
+                        className="flex"
                     >
-                        { ws.val && "Rp" + formatStrNumber(ws.val) }
+                        {ws.val && "Rp" + formatStrNumber(ws.val)}
+                        <AITooltip showNew={showNew} />
                     </motion.span>
                 </div>
             </motion.div>
-            <div className="h-full pt-1">
-                <Tooltip open={tooltipOpen}>
-                    <TooltipTrigger 
-                        onMouseEnter={() => {setTooltipOpen(true)}}
-                        onMouseLeave={() => {setTooltipOpen(false)}}
-                        onClick={() => {setTooltipOpen(!tooltipOpen)}}
-                        asChild
-                    >
-                        <Info className={`w-4 h-4 text-zinc-600 transition-opacity ${showNew ? "opacity-0" : "opacity-100"}`} />
-                    </TooltipTrigger>
-                    <TooltipContent className="max-w-40">
-                        <p>Price will change depending on demand</p>
-                    </TooltipContent>
-                </Tooltip>
-            </div>
         </div>
     )
 }

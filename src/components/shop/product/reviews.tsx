@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/avatar"
 import { getProductReviews, ProductReview } from "@/db/product"
 import ProductRating from "./rating"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 
 function ReviewCard(props: {
@@ -43,28 +43,36 @@ function ReviewCard(props: {
 }
 
 export default function ProductReviews() {
-    const firstReview = getProductReviews(1)[0]
-    const reviews = getProductReviews(5, 1)
+    const [firstReview, setFirstReview] = useState<ProductReview | null>(null)
+    const [reviews, setReviews] = useState<ProductReview[]>([])
 
     const [showMore, setShowMore] = useState(false)
+
+    useEffect(() => {
+        setFirstReview(getProductReviews(1)[0])
+        setReviews(getProductReviews(5, 1))
+    }, [])
 
     return (
         <div className="space-y-2">
             <h3 className="text-lg font-medium">Reviews</h3>
-            <div className="space-y-4">
-                <ReviewCard reviewData={firstReview} />
-                {showMore && reviews.map((data, i) => {
-                    return (
-                        <ReviewCard reviewData={data} key={i} />
-                    )
-                })}
-                <Button
-                    variant="ghost"
-                    onClick={() => setShowMore(!showMore)}
-                >
-                    { showMore ? "Hide" : "Show more reviews" }
-                </Button>
-            </div>
+            {
+                firstReview &&
+                <div className="space-y-4">
+                    <ReviewCard reviewData={firstReview} />
+                    {showMore && reviews.map((data, i) => {
+                        return (
+                            <ReviewCard reviewData={data} key={i} />
+                        )
+                    })}
+                    <Button
+                        variant="ghost"
+                        onClick={() => setShowMore(!showMore)}
+                    >
+                        { showMore ? "Hide" : "Show more reviews" }
+                    </Button>
+                </div>
+            }
         </div>
     )
 }

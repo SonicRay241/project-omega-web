@@ -6,6 +6,7 @@ import ProductDescription from '@/components/shop/product/description'
 import ProductFooter from '@/components/shop/product/footer'
 import ProductReviews from '@/components/shop/product/reviews'
 import ProductRating from '@/components/shop/product/rating'
+import ProductSelector from '@/components/shop/product/selector'
 
 export default async function Page(
     { params }: { params: Promise<{ productId: string }> }
@@ -29,11 +30,9 @@ export default async function Page(
                                 </div>
                                 <ProductRating rating={data.rating} />
                             </div>
-                            <Price
-                                productId={productId}
+                            <ProductSelector 
                                 apiUrl={API_URL}
-                            />
-                            <ProductVariant
+                                productId={productId}
                                 variants={data.variants}
                             />
                         </div>
