@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { inter } from "@/lib/fonts";
 import "./globals.css";
+import { Toaster } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 export const metadata: Metadata = {
   title: "E-Commerce sample app",
@@ -17,7 +19,10 @@ export default function RootLayout({
       <body
         className={`${inter.className} antialiased`}
       >
-        {children}
+        <TooltipProvider>
+          {children}
+          <Toaster/>
+        </TooltipProvider>
       </body>
     </html>
   );

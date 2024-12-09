@@ -4,7 +4,7 @@ export default function Featured(props: {
     product: {
         name: string,
         price: number,
-        image: string
+        image?: string
     }[]
 }) {
     return (
@@ -18,7 +18,7 @@ export default function Featured(props: {
                                 alt={product.name}
                                 className="object-cover w-full h-60 mb-4 rounded-md"
                                 height="200"
-                                src={product.image}
+                                src={product.image || "/placeholder.svg?height=200&width=200"}
                                 style={{
                                     aspectRatio: "200/200",
                                     objectFit: "cover",

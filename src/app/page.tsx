@@ -7,20 +7,20 @@ import Navbar from "@/components/landing/navbar"
 export default function Page() {
   return (
     <div className="flex flex-col min-h-screen">
-      <Navbar />
+      <Navbar/>
       <main className="flex-1">
-        <Hero />
+        <Hero/>
         <Featured
           product={[
-            { name: "Espresso Blend", price: 14.99, image: "/placeholder.svg?height=200&width=200" },
-            { name: "Colombian Supremo", price: 16.99, image: "/placeholder.svg?height=200&width=200" },
-            { name: "Ethiopian Yirgacheffe", price: 18.99, image: "/placeholder.svg?height=200&width=200" },
-            { name: "French Roast", price: 15.99, image: "/placeholder.svg?height=200&width=200" },
-          ]}
+            { name: "Espresso Blend", price: 14.99 },
+            { name: "Colombian Supremo", price: 16.99 },
+            { name: "Ethiopian Yirgacheffe", price: 18.99 },
+            { name: "French Roast", price: 15.99 },
+        ]}
         />
-        <Newsletter />
+        <Newsletter/>
       </main>
-      <Footer />
+      <Footer/>
     </div>
   )
 }
