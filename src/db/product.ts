@@ -1,3 +1,5 @@
+import { faker } from "@faker-js/faker"
+
 type ProductInfo = {
     name: string
     seller: string
@@ -32,4 +34,29 @@ export function getProductInfo(): ProductInfo {
     }
 
     return data
+}
+
+type ProductReview = {
+    username: string
+    profile: string
+    review: string
+    rating: number // 1-5
+}
+
+export function getProductReviews(count: number = 5, offset: number = 0) {
+    let data: ProductReview[] = []
+
+    for (let i = 0; i < count; i++) {
+        data = [...data,
+            {
+                username: faker.person.fullName(),
+                profile: "/placeholder.svg",
+                review: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+                rating: faker.number.float({
+                    min: 3,
+                    max: 5,
+                })
+            }
+        ]
+    }
 }
