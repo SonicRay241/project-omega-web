@@ -13,9 +13,10 @@ import {
     TooltipTrigger,
 } from "@/components/ui/tooltip"
 
-export default function Price(params: {
+export default function Price(props: {
     productId: string
     apiUrl: string
+    variant: string
 }) {
     const [pageLoaded, setPageLoaded] = useState(false)
     const [currDuration, setCurrDuration] = useState(0)
@@ -24,7 +25,7 @@ export default function Price(params: {
     const [tooltipOpen, setTooltipOpen] = useState(false)
 
     const ws = useWS(
-        `ws://${params.apiUrl}/live-update/product/${params.productId}/price`,
+        `ws://${props.apiUrl}/live-update/product/${props.productId}/price?variant=${props.variant}`,
         {
             onMessage: () => {
                 if (!pageLoaded) {
