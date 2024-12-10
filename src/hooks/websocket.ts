@@ -4,7 +4,7 @@ export const useWS = (
     url: string,
     options?: {
         onOpen?: () => void,
-        onClose?: () => void,
+        onClose?: (event: CloseEvent) => void,
         onError?: () => void,
         onMessage?: () => void
     }
@@ -22,9 +22,9 @@ export const useWS = (
             options?.onOpen && options.onOpen()
         }
         
-        socket.onclose = () => {
+        socket.onclose = (event) => {
             setIsReady(false)
-            options?.onClose && options.onClose()
+            options?.onClose && options.onClose(event)
         }
 
         socket.onerror = () => {
@@ -52,6 +52,14 @@ export const useWS = (
         }
     };
 
+    const close = (code?: number, reason?: string) => {
+        if (ws.current && ws.current.readyState === WebSocket.OPEN) {
+            ws.current.close(code, reason);
+        } else {
+            console.warn("WebSocket is not open.");
+        }
+    }
+
     // bind is needed to make sure `send` references correct `this`
-    return {isReady, val, send: send}
+    return {isReady, val, send, close}
 }

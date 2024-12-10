@@ -19,7 +19,7 @@ export default async function Page(
         <div className="">
             <ProductHeader />
             <div className="container mx-auto max-w-screen-md">
-                <div className="px-4 pt-1 md:px-8">
+                <div className="px-4 pt-1 md:pt-4 md:px-8">
                     <div className="grid md:grid-cols-2 gap-2 md:gap-6">
                         <ImageCarousel images={data.images} />
                         <div className="space-y-4 px-2">

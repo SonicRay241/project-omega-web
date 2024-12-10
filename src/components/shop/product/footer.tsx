@@ -13,7 +13,7 @@ export default function ProductFooter() {
                     <Heart size={64} />
                 </Button>
                 <Button
-                    className="flex gap-4 rounded-full h-fit px-5 py-4 drop-shadow-xl"
+                    className="flex gap-3 rounded-full h-fit px-5 py-4 drop-shadow-xl"
                     size="lg"
                 >
                     <ShoppingBag />

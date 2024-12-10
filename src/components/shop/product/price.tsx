@@ -67,7 +67,7 @@ export default function Price(props: {
                 toast.error(
                     "An error occured",
                     {
-                        description: "Connection to a live service interrupted",
+                        description: "An error happened when connecting to a live service",
                         classNames: {
                             icon: "text-red-600"
                         },
@@ -75,17 +75,20 @@ export default function Price(props: {
                     }
                 )
             },
-            onClose: () => {
-                toast.error(
-                    "An error occured",
-                    {
-                        description: "Connection to a live service closed, please reload the page",
-                        classNames: {
-                            icon: "text-red-600"
-                        },
-                        position: "top-center"
-                    }
-                )
+            onClose: (e) => {
+                console.log(e.code)
+                if (e.code > 1006) {
+                    toast.error(
+                        "An error occured",
+                        {
+                            description: "Connection to a live service interrupted, please reload the page",
+                            classNames: {
+                                icon: "text-red-600"
+                            },
+                            position: "top-center"
+                        }
+                    )
+                }
             }
         }
     )
@@ -101,6 +104,12 @@ export default function Price(props: {
             setOldValue(ws.val || "0")
         }, 255)
     }, [ws.val])
+
+    useEffect(() => {
+        return () => {
+            ws.close()
+        }
+    }, [])
 
     return (
         <div className="flex gap-1 text-3xl font-bold">

@@ -9,6 +9,49 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
+}
+
+model Product {
+  id          String          @id @default(uuid())
+  name        String
+  sellerId    String
+  rating      Float
+  description String          @db.LongText
+  variants    Variant[]
+  images      ProductImages[]
+
+  user User @relation(fields: [sellerId], references: [id], onDelete: Cascade)
+}
+
+model ProductImages {
+  id        String @id @default(uuid())
+  productId String
+  base64    String @db.LongText
+
+  Product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model Variant {
+  id        String @id @default(uuid())
+  productId String
+  name      String
+  price     String
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id           String @id @default(uuid())
+  name         String
+  passwordHash String
+
+  products Product[]
+}
+
+model ProductCart {
+  id        String @id @default(uuid())
+  productId String
+  count     Int
 }

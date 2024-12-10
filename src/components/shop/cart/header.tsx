@@ -5,7 +5,7 @@ import CartButton from "@/components/cartbutton";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
 
-export default function ProductHeader() {
+export default function CartHeader() {
     const [scrolled, setScrolled] = useState(false);
 
     useEffect(() => {
@@ -35,11 +35,11 @@ export default function ProductHeader() {
                         <BackButton />
                     </div>
                     <div className="flex justify-center items-center">
-                        <h3 className="text-lg font-semibold">Product Details</h3>
+                        <h3 className="text-lg font-semibold">My Cart</h3>
                     </div>
-                    <div className="flex justify-end items-center">
+                    {/* <div className="flex justify-end items-center">
                         <CartButton />
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </div>
