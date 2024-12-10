@@ -1,12 +1,11 @@
-import Price from '@/components/shop/product/price'
 import ImageCarousel from '@/components/shop/product/carousel'
 import { getProductInfo } from '@/db/product'
-import ProductVariant from '@/components/shop/product/variant'
 import ProductDescription from '@/components/shop/product/description'
 import ProductFooter from '@/components/shop/product/footer'
 import ProductReviews from '@/components/shop/product/reviews'
 import ProductRating from '@/components/shop/product/rating'
 import ProductSelector from '@/components/shop/product/selector'
+import ProductHeader from '@/components/shop/product/header'
 
 export default async function Page(
     { params }: { params: Promise<{ productId: string }> }
@@ -18,8 +17,9 @@ export default async function Page(
 
     return (
         <div className="">
+            <ProductHeader />
             <div className="container mx-auto max-w-screen-md">
-                <div className="p-4 md:p-8">
+                <div className="px-4 pt-1 md:px-8">
                     <div className="grid md:grid-cols-2 gap-2 md:gap-6">
                         <ImageCarousel images={data.images} />
                         <div className="space-y-4 px-2">

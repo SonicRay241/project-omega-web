@@ -55,6 +55,7 @@ export function getProductReviews(count: number = 5, offset: number = 0) {
                 rating: faker.number.float({
                     min: 3,
                     max: 5,
+                    multipleOf: 0.5
                 })
             }
         ]

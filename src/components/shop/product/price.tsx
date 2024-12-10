@@ -99,7 +99,7 @@ export default function Price(props: {
     useEffect(() => {
         setTimeout(() => {
             setOldValue(ws.val || "0")
-        }, 300)
+        }, 255)
     }, [ws.val])
 
     return (
