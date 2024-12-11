@@ -1,11 +1,10 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import useIsOverflow from "@/hooks/overflow"
 import { Separator } from "@radix-ui/react-separator"
 import { Dot, Minus, Plus } from "lucide-react"
 import Image from "next/image"
-import { useRef } from "react"
+import { forwardRef } from "react"
 
 function ProductDetail() {
     return (
@@ -53,26 +52,21 @@ function ProductDetail() {
 }
 
 
-export default function CartList(props: {
+export default forwardRef<HTMLDivElement>((props: {
     onScrollBottom?: () => void
-}) {
+}, ref) => {
     return (
         <div
-            className="w-full flex flex-col gap-2 px-4 overflow-y-auto no-scrollbar"
+            className="w-full flex flex-col gap-2 px-8 overflow-y-auto no-scrollbar pt-6"
             onScroll={(e) => {
                 const target = e.target as HTMLDivElement
                 Math.abs(target.scrollHeight - (target.scrollTop + target.clientHeight)) <= 1
                 && props.onScrollBottom && props.onScrollBottom()
             }}
+            ref={ref}
         >
-            <ProductDetail />
-            <ProductDetail />
-            <ProductDetail />
-            <ProductDetail />
-            <ProductDetail />
-            <ProductDetail />
             <ProductDetail />
             <ProductDetail />
         </div>
     )
-}
+})
