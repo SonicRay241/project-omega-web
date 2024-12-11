@@ -7,9 +7,12 @@ import ProductVariant from "./variant";
 export default function ProductSelector(props: {
     productId: string,
     apiUrl: string,
-    variants: string[]
+    variants: {
+        name: string;
+        price: number;
+    }[]
 }) {
-    const [selectedVariant, setSelectedVariant] = useState(props.variants[0])
+    const [selectedVariant, setSelectedVariant] = useState(props.variants[0].name)
 
     return (
         <>

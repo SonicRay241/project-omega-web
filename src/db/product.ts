@@ -6,7 +6,7 @@ export type ProductInfo = {
     description: string
     rating: number // 1-5 floating point
     images: string[] // Array of image URLs
-    variants: string[] // Array of variant names ex: (250ml, 1000ml) or (Small, Medium, Big)
+    variants: { name: string, price: number }[] // Array of variant names ex: (250ml, 1000ml) or (Small, Medium, Big)
 }
 
 export function getProductInfo(): ProductInfo {
@@ -25,10 +25,11 @@ export function getProductInfo(): ProductInfo {
             "/placeholder.svg",
         ],
         variants: [
-            "250ml",
+            { name: "250ml", price: 40000 },
+            { name: "1000ml", price: 150000 },
             // "500ml",
             // "750ml",
-            "1000ml",
+            // "1000ml",
             // "2000ml",
         ]
     }

@@ -4,7 +4,10 @@ import { Button } from "@/components/ui/button"
 import { useState } from "react"
 
 export default function ProductVariants(props: {
-    variants: string[]
+    variants: {
+        name: string;
+        price: number;
+    }[]
     onVariantChange: (variant: string) => void
 }) {
     const [indexSelected, setIndexSelected] = useState(0)
@@ -22,10 +25,10 @@ export default function ProductVariants(props: {
                             size="lg"
                             onClick={() => {
                                 setIndexSelected(i)
-                                props.onVariantChange(props.variants[i])
+                                props.onVariantChange(props.variants[i].name)
                             }}
                         >
-                            {variant}
+                            {variant.name}
                         </Button>
                     )
                 })}

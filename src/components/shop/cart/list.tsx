@@ -1,20 +1,24 @@
+"use client"
+
 import { Button } from "@/components/ui/button"
+import useIsOverflow from "@/hooks/overflow"
 import { Separator } from "@radix-ui/react-separator"
 import { Dot, Minus, Plus } from "lucide-react"
 import Image from "next/image"
+import { useRef } from "react"
 
 function ProductDetail() {
     return (
-        <div className="w-full space-y-3">
-            <div className="w-full h-24 grid grid-cols-7 gap-4">
+        <div className="w-full">
+            <div className="w-full h-24 flex gap-4">
                 <Image
                     src={"/placeholder.svg"}
                     alt={`Product Name`}
                     width={64}
                     height={64}
-                    className="w-full object-cover rounded-xl col-span-2 shadow-lg"
+                    className="size-24 object-cover rounded-xl col-span-2 shadow-lg"
                 />
-                <div className="col-span-5">
+                <div className="w-full">
                     <h2 className="font-semibold text-lg">Product Name</h2>
                     <div className="flex items-center text-zinc-400 text-sm">
                         <p>Seller Name</p>
@@ -43,17 +47,31 @@ function ProductDetail() {
                     </div>
                 </div>
             </div>
-            <Separator className="h-[1px] bg-zinc-200" />
+            <Separator className="h-[1px] bg-zinc-200 my-7" />
         </div>
     )
 }
 
 
-export default function CartList() {
-
-
+export default function CartList(props: {
+    onScrollBottom?: () => void
+}) {
     return (
-        <div className="grid grid-cols-1 gap-2 px-4">
+        <div
+            className="w-full flex flex-col gap-2 px-4 overflow-y-auto no-scrollbar"
+            onScroll={(e) => {
+                const target = e.target as HTMLDivElement
+                Math.abs(target.scrollHeight - (target.scrollTop + target.clientHeight)) <= 1
+                && props.onScrollBottom && props.onScrollBottom()
+            }}
+        >
+            <ProductDetail />
+            <ProductDetail />
+            <ProductDetail />
+            <ProductDetail />
+            <ProductDetail />
+            <ProductDetail />
+            <ProductDetail />
             <ProductDetail />
         </div>
     )

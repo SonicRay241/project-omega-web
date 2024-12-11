@@ -25,9 +25,9 @@ export default function CartHeader() {
         };
     }, []);
     return (
-        <div className="h-14">
+        // <div className="h-14">
             <div className={cn(
-                "flex justify-center fixed h-14 top-0 w-screen z-50 bg-background transition-shadow",
+                "flex justify-center fixed h-14 left-0 top-0 w-screen z-50 bg-background transition-shadow",
                 scrolled ? "shadow-lg" : "shadow-none"
             )}>
                 <div className="grid grid-cols-3 px-2 md:px-4 max-w-screen-md w-full">
@@ -37,11 +37,8 @@ export default function CartHeader() {
                     <div className="flex justify-center items-center">
                         <h3 className="text-lg font-semibold">My Cart</h3>
                     </div>
-                    {/* <div className="flex justify-end items-center">
-                        <CartButton />
-                    </div> */}
                 </div>
             </div>
-        </div>
+        // </div>
     )
 }
