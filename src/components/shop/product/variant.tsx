@@ -9,8 +9,8 @@ export default function ProductVariants(props: {
         price: number;
     }[]
     onVariantChange: (variant: string) => void
+    variantSelected: string
 }) {
-    const [indexSelected, setIndexSelected] = useState(0)
 
     return (
         <div className="mt-4 text-lg space-y-3 font-medium">
@@ -21,10 +21,9 @@ export default function ProductVariants(props: {
                         <Button
                             className="rounded-full font-semibold px-6"
                             key={i}
-                            variant={indexSelected == i ? "default" : "outline"}
+                            variant={props.variantSelected == variant.name ? "default" : "outline"}
                             size="lg"
                             onClick={() => {
-                                setIndexSelected(i)
                                 props.onVariantChange(props.variants[i].name)
                             }}
                         >

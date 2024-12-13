@@ -21,6 +21,7 @@ model Product {
   description String          @db.LongText
   variants    Variant[]
   images      ProductImages[]
+  productCart ProductCart[]
 
   user User @relation(fields: [sellerId], references: [id], onDelete: Cascade)
 }
@@ -34,10 +35,11 @@ model ProductImages {
 }
 
 model Variant {
-  id        String @id @default(uuid())
-  productId String
-  name      String
-  price     String
+  id          String        @id @default(uuid())
+  productId   String
+  name        String
+  price       Int
+  productCart ProductCart[]
 
   product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 }
@@ -47,11 +49,26 @@ model User {
   name         String
   passwordHash String
 
-  products Product[]
+  products     Product[]
+  productCarts ProductCart[]
+  tokens       Token[]
+}
+
+model Token {
+  id     String @id @default(uuid())
+  userId String @default(uuid())
+  
+  User   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model ProductCart {
   id        String @id @default(uuid())
   productId String
+  userId    String // For cart owner
+  variantId String
   count     Int
+
+  User    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  Product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  Variant Variant @relation(fields: [variantId], references: [id])
 }

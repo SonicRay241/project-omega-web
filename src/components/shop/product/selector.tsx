@@ -11,8 +11,21 @@ export default function ProductSelector(props: {
         name: string;
         price: number;
     }[]
+    searchParamVariant: string | undefined
 }) {
-    const [selectedVariant, setSelectedVariant] = useState(props.variants[0].name)
+    // Just some linear search
+    function checkVariantParam(variant: string | null) {
+        if (!variant) return false
+        for (let i = 0; i < props.variants.length; i++) {
+            if (props.variants[i].name == variant)
+                return true
+        }
+        return false
+    }
+    
+    const [selectedVariant, setSelectedVariant] = useState<string>(
+        props.searchParamVariant || props.variants[0].name
+    )
 
     return (
         <>
@@ -24,6 +37,7 @@ export default function ProductSelector(props: {
             <ProductVariant
                 onVariantChange={setSelectedVariant}
                 variants={props.variants}
+                variantSelected={selectedVariant}
             />
         </>
     )

@@ -39,7 +39,8 @@ export const useWS = (
         ws.current = socket
 
         return () => {
-            socket.close()
+            if (!socket.OPEN)
+                socket.close()
         }
     }, [])
 

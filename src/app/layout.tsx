@@ -3,6 +3,7 @@ import { inter } from "@/lib/fonts";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import Transition from "@/components/layout/transition";
 
 export const metadata: Metadata = {
   title: "E-Commerce sample app",
@@ -13,6 +14,7 @@ export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
+
 }>) {
   return (
     <html lang="en">
@@ -20,7 +22,9 @@ export default function RootLayout({
         className={`${inter.className} antialiased`}
       >
         <TooltipProvider>
-          {children}
+          <Transition>
+            {children}
+          </Transition>
           <Toaster/>
         </TooltipProvider>
       </body>
