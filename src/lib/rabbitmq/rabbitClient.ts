@@ -1,13 +1,10 @@
-import rabbit from "rabbitmq-stream-js-client"
+import { AMQPChannel, AMQPClient } from "@cloudamqp/amqp-client";
+import { AMQPBaseClient } from "@cloudamqp/amqp-client/amqp-base-client";
 
-const rabbitGlobal = globalThis as unknown as { rabbit: rabbit.Client }
+const globalForAMQP = globalThis as unknown as { amqp: AMQPBaseClient, demandChannel: AMQPChannel }
 
-export const rabbitClient = rabbitGlobal.rabbit || await rabbit.connect({
-    hostname: process.env.RABBIT_HOST!,
-    port: +process.env.RABBIT_PORT!,
-    username: process.env.RABBIT_USERNAME!,
-    password: process.env.RABBIT_PASSWORD!,
-    vhost: process.env.RABBIT_VHOST!
-})
+const amqp = globalForAMQP.amqp || (new AMQPClient(process.env.RABBIT_SERVICE_URI!))
+const connection = await amqp.connect()
+export const demandChannel = globalForAMQP.demandChannel || await connection.channel()
 
-if (process.env.NODE_ENV !== "production") rabbitGlobal.rabbit = rabbitClient
+if (process.env.NODE_ENV !== "production") globalForAMQP.amqp = amqp
