@@ -1,7 +1,11 @@
+"use client"
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { uToken } from "@/lib/demo";
 import { cn, formatStrNumber } from "@/lib/utils";
+import { toast } from "sonner";
 
 export default function CartCheckout(props: {
     className?: string,
@@ -36,6 +40,57 @@ export default function CartCheckout(props: {
                         variant="default"
                         size="lg"
                         className="rounded-full w-full h-14 md:h-10 mt-8 text-base font-semibold"
+
+                        onClick={() => {
+                            fetch("/api/checkout", {
+                                method: "POST",
+                                body: JSON.stringify({
+                                    userToken: uToken, // For demo
+                                }),
+                            })
+                            .then((res) => {
+                                if (res.status == 200) {
+                                    toast.success(
+                                        "Checkout Complete!",
+                                        {
+                                            description: "",
+                                            classNames: {
+                                                icon: "text-green-600"
+                                            },
+                                            position: "top-center"
+                                        }
+                                    )
+
+                                    setTimeout(() => {
+                                        window.location.reload()
+                                    }, 2000)
+                                }
+                                else {
+                                    toast.error(
+                                        "An error occured",
+                                        {
+                                            description: "An error happened when updating yout cart",
+                                            classNames: {
+                                                icon: "text-red-600"
+                                            },
+                                            position: "top-center"
+                                        }
+                                    )
+                                }
+                            })
+                            .catch(() => {
+                                toast.error(
+                                    "An error occured",
+                                    {
+                                        description: "An error happened when updating yout cart",
+                                        classNames: {
+                                            icon: "text-red-600"
+                                        },
+                                        position: "top-center"
+                                    }
+                                )
+                            })
+                        }}
                     >
                         Checkout
                     </Button>

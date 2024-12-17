@@ -1,3 +1,5 @@
+"use client"
+
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { Dot, Minus, Plus } from "lucide-react"
@@ -5,10 +7,30 @@ import Image from "next/image"
 import { type CartProductInfo } from "@/db/cart"
 import Link from "next/link"
 import { formatStrNumber } from "@/lib/utils"
+import { useEffect, useState } from "react"
+import { uToken } from "@/lib/demo"
 
 export default function ProductDetail(props: {
-    productInfo: CartProductInfo
+    productInfo: CartProductInfo,
+    onSubtotalUpdate: (delta: number) => void
 }) {
+    const [count, setCount] = useState(props.productInfo.count)
+    const [isLoaded, setIsLoaded] = useState(false)
+
+    useEffect(() => {
+        if (isLoaded)
+            fetch("/api/cart/update-count", {
+                method: "POST",
+                body: JSON.stringify({
+                    userToken: uToken,
+                    cartItemId: props.productInfo.cartId,
+                    count: count
+                }),
+            })
+        
+        setIsLoaded(true)
+    }, [count])
+
     return (
         <div className="w-full">
             <div className="w-full h-24 flex gap-4">
@@ -40,13 +62,25 @@ export default function ProductDetail(props: {
                             <Button
                                 variant="outline"
                                 className="rounded-full w-0 h-0 px-0 p-4"
+                                onClick={() => {
+                                    if (count > 0) {
+                                        setCount(count - 1)
+                                        props.onSubtotalUpdate(-props.productInfo.price)
+                                    }
+                                
+                                }}
+                                disabled={count < 2}
                             >
                                 <Minus />
                             </Button>
-                            <p className="">2</p>
+                            <p className="">{count}</p>
                             <Button
                                 variant="outline"
                                 className="rounded-full w-0 h-0 px-0 p-4"
+                                onClick={() => {
+                                    setCount(count + 1)
+                                    props.onSubtotalUpdate(props.productInfo.price)
+                                }}
                             >
                                 <Plus />
                             </Button>

@@ -18,7 +18,7 @@ export default function CartClientWrapper(props: {
     useEffect(() => {
         let subtotal = 0
         props.productList.forEach((product) => {
-            subtotal += product.price
+            subtotal += product.price * product.count
         })
 
         setSubtotal(subtotal)
@@ -61,14 +61,16 @@ export default function CartClientWrapper(props: {
                     <CartList
                         productList={props.productList}
                         ref={listRef}
+                        onSubtotalUpdate={(delta) => setSubtotal(subtotal + delta)}
                     />
-                    <CartCheckout
-                        className={cn(
-                            bottom ? "shadow-none" : "shadow-[0_-4px_6px_-1px_rgb(0_0_0/0.1)]",
-                            props.productList.length < 1 && "hidden"
-                        )}
-                        subtotal={subtotal}
-                    />
+                    {props.productList.length > 0 &&
+                        <CartCheckout
+                            className={cn(
+                                bottom ? "shadow-none" : "shadow-[0_-4px_6px_-1px_rgb(0_0_0/0.1)]"
+                            )}
+                            subtotal={subtotal}
+                        />
+                    }
                 </div>
             </div>
         </div>

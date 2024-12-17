@@ -1,33 +1,50 @@
 import { demandChannel } from "@/lib/rabbitmq/rabbitClient"
+import { prisma } from "@/prisma"
 import { NextRequest, NextResponse } from "next/server"
 
-type CheckoutRequest = {
-    uid: string,
-    count: number
-}
-
 export async function POST(req: NextRequest) {
-    const body = (await req.json()) as CheckoutRequest
+    const body = (await req.json()) as { userToken: string }
 
-    // use uid to fetch cart and flush and rabbitmq
-    const uid = body.uid
+    const tokenData = await prisma.token.findFirst({
+        where: {
+            id: body.userToken
+        }
+    })
+
+    if (!tokenData) {
+        return NextResponse.json({ message: "User not found" }, { status: 404 })
+    }
+
     const timestamp = (new Date()).toISOString()
 
-    console.log({ uid, demandDelta: body.count, timestamp })
+    // use uid to fetch cart and flush and rabbitmq
+    const products = await prisma.productCart.findMany()
 
-    const publish = await demandChannel.basicPublish(
-        "",
-        "stock-demand",
-        Buffer.from(
-            JSON.stringify({
-                demandDelta: body.count,
-                timestamp,
-                uid
-            })
+    if (products.length < 1) {
+        return NextResponse.json({ message: "Empty" }, { status: 400 })
+    }
+
+    products.map(async (p) => {
+        await demandChannel.basicPublish(
+            "",
+            "stock-demand",
+            Buffer.from(
+                JSON.stringify({
+                    uid: p.productId,
+                    variant: p.variantId,
+                    demandDelta:p.count,
+                    timestamp,
+                })
+            )
         )
-    )
+    })
 
+    await prisma.productCart.deleteMany({
+        where: {
+            userId: tokenData.userId
+        }
+    })
 
-    return NextResponse.json({ uid, demandDelta: body.count, timestamp, publish }, { status: 200 })
+    return NextResponse.json({ message: "Success" }, { status: 200 })
 }
 

@@ -1,4 +1,3 @@
-import BackButton from "@/components/backbutton";
 import CartButton from "@/components/cartbutton";
 import { cn } from "@/lib/utils";
 
@@ -17,7 +16,7 @@ export default function ShopHeader() {
                         <h3 className="text-lg font-semibold">Product Catalogue</h3>
                     </div>
                     <div className="flex justify-end items-center">
-                        
+                        <CartButton />
                     </div>
                 </div>
             </div>

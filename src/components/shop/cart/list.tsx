@@ -4,7 +4,8 @@ import ProductDetail from "./productdetail"
 
 type ComponentProps = {
     onScrollBottom?: () => void
-    productList: CartProductInfo[]
+    productList: CartProductInfo[],
+    onSubtotalUpdate: (delta: number) => void
 }
 
 export default forwardRef<HTMLDivElement, ComponentProps>
@@ -22,15 +23,9 @@ export default forwardRef<HTMLDivElement, ComponentProps>
             {props.productList.length > 0
                 ? props.productList.map((productData, i) => {
                     return <ProductDetail
-                        productInfo={{
-                            name: productData.name,
-                            seller: productData.seller,
-                            image: productData.image,
-                            price: productData.price,
-                            url: productData.url,
-                            variant: productData.variant
-                        }}
+                        productInfo={productData}
                         key={i}
+                        onSubtotalUpdate={props.onSubtotalUpdate}
                     />
                 })
                 : <div className="flex w-full justify-center items-center h-10">

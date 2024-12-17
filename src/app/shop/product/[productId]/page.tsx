@@ -6,6 +6,7 @@ import ProductReviews from '@/components/shop/product/reviews'
 import ProductRating from '@/components/shop/product/rating'
 import ProductSelector from '@/components/shop/product/selector'
 import ProductHeader from '@/components/shop/product/header'
+import { faker } from '@faker-js/faker'
 
 export default async function Page(
     { params, searchParams }: {
@@ -47,7 +48,7 @@ export default async function Page(
                                 </div>
                             </div>
                             <div className="space-y-4 px-2 py-4 md:py-0">
-                                <ProductDescription description={data.description} />
+                                <ProductDescription description={faker.lorem.paragraph()} />
                                 <ProductReviews />
                             </div>
                         </>
@@ -60,7 +61,11 @@ export default async function Page(
                 </div>
             </div>
             {
-                data && <ProductFooter />
+                data &&
+                <ProductFooter
+                    variant={variant || data.variants[0].name}
+                    productId={productId}
+                />
             }
         </div>
     )

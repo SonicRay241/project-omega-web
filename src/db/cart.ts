@@ -7,12 +7,14 @@ export type CartProductInfo = {
     image: string
     variant: string // Array of variant names ex: (250ml, 1000ml) or (Small, Medium, Big)
     price: number
+    count: number
+    cartId: string
 }
 
 export async function getCartList(userToken: string): Promise<CartProductInfo[] | null> {
     const cartData = await prisma.token.findFirst({
         where: {
-            userId: userToken
+            id: userToken
         },
         include: {
             User: {
@@ -35,7 +37,7 @@ export async function getCartList(userToken: string): Promise<CartProductInfo[] 
                                     name: true,
                                     price: true
                                 }
-                            }
+                            },
                         }
                     }
                 }
@@ -53,7 +55,9 @@ export async function getCartList(userToken: string): Promise<CartProductInfo[] 
                 url: `/shop/product/${p.Product.id}`,
                 image: "/placeholder.svg",
                 variant: p.Variant.name,
-                price: p.Variant.price
+                price: p.Variant.price,
+                count: p.count,
+                cartId: p.id
             }
         }
     )
